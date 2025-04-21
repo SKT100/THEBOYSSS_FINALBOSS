@@ -1,0 +1,169 @@
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    animation: formZoomFade 0.6s ease-in-out;
+  }
+
+  @keyframes formZoomFade {
+    0% {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 15px;
+    background: rgba(0, 0, 0, 0.2);
+    color: white;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.3s ease;
+  }
+  
+  input:focus {
+    background: rgba(0, 0, 0, 0.3);
+    box-shadow: 0 0 5px #fff;
+  }
+  
+  button {
+    padding: 12px;
+    border: none;
+    border-radius: 15px;
+    background: black;
+    color: white;
+    font-size: 1.1rem;
+    width: 100%;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  button:hover {
+    background: #333;
+  }
+  
+  h2 {
+    margin: 10px 0;
+    font-size: 1.5rem;
+  }
+  
+  h2 span {
+    font-weight: normal;
+  }
+
+  @keyframes logoHover {
+    0% {
+      transform: scale(1) rotate(0deg);
+    }
+    100% {
+      transform: scale(1.1) rotate(360deg);
+    }
+  }
+
+  .logo-heading {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    justify-content: center;
+  }
+  
+  .logo-heading h2 {
+    margin: 0;
+  }
+  
+  
+  .logo {
+    width: 50px;
+    height: 50px;
+    transition: transform 0.5s ease-in-out;
+  }
+  
+  .logo:hover {
+    animation: logoHover 1s forwards;
+  }
+
+
+  .social-signup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+  
+  .icons {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .icons img {
+    width: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+  }
+  
+  .icons img:hover {
+    filter: drop-shadow(0 0 5px white) brightness(1.2);
+    transform: scale(1.1);
+  }
+  
+  .links {
+    font-size: 0.8rem;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .links a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+
+  .letter {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInUp 0.5s forwards;
+  }
+  
+  @keyframes fadeInUp {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+
+
+
+  @media screen and (max-width: 480px) {
+    .glass-card {
+      padding: 20px;
+    }
+    input, button {
+      font-size: 0.9rem;
+    }
+    h2 {
+      font-size: 1.3rem;
+    }
+    .logo {
+      width: 40px;
+      height: 40px;
+    }
+  }
+  
