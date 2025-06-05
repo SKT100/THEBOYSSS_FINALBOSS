@@ -1,37 +1,46 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import './Form.css';
+import splitText from './splitText';
+import { UserContext } from '../context/UserContext';
 
-const splitText = (text) => {
-  return text.split('').map((char, index) => {
-    const isBold = index < 6; 
-    return (
-      <span
-        key={index}
-        className="letter"
-        style={{
-          animationDelay: `${index * 0.05}s`,
-          fontWeight: isBold ? 'bold' : 'normal', 
-        }}
-      >
-        {char}
-      </span>
-    );
+function Signup({ onSignupSuccess }) {
+  const { setUser } = useContext(UserContext);
+
+  const [formData, setFormData] = useState({
+    fullName: '',
+    username: '',
+    email: '',
+    phone: '',
+    password: ''
   });
-};
 
-function Signup() {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setUser({ ...formData });
+
+    // Only trigger parent to handle popup and redirect logic
+    onSignupSuccess();
+  };
+
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleSubmit}>
       <div className="logo-heading">
         <img src="/logo.svg" className="logo" alt="logo" />
-        <h2>
-          {splitText('BEYONDmeet')}
-        </h2>
+        <h2>{splitText('BEYONDmeet')}</h2>
       </div>
-      <input type="text" placeholder="Name" required />
-      <input type="email" placeholder="Email Address" required />
+
+      <input type="text" name="fullName" placeholder="Full Name" value={formData.fullName} onChange={handleChange} required />
+      <input type="text" name="username" placeholder="Username" value={formData.username} onChange={handleChange} required />
+      <input type="email" name="email" placeholder="Email Address" value={formData.email} onChange={handleChange} required />
+      <input type="tel" name="phone" placeholder="Phone Number" value={formData.phone} onChange={handleChange} required />
       <input type="password" placeholder="Password" required />
-      <button type="submit">Create</button>
+
+      <button type="submit">Sign Up</button>
+
       <div className="social-signup">
         <span>Sign In using</span>
         <div className="icons">
@@ -39,6 +48,7 @@ function Signup() {
           <img src="/github.svg" alt="GitHub" />
         </div>
       </div>
+
       <div className="links">
         <a href="#">Help</a> | <a href="#">Privacy</a> | <a href="#">Terms</a>
       </div>
