@@ -1,9 +1,9 @@
-// App.jsx
 import React, { useState } from 'react';
 import Signup from './components/Signup';
 import Login from './components/Login';
 import Popup from './components/Popup';
 import HomePage from './components/HomePage';
+import MeetingRoom from './components/Meeting-room'; 
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
@@ -45,6 +45,7 @@ function App() {
           }
         />
         <Route path="/homepage" element={<HomePage />} />
+        <Route path="/meeting/:id" element={<MeetingRoom />} /> 
       </Routes>
     </Router>
   );

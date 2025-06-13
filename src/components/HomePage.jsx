@@ -1,13 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import Profile from './Profile';
 import './HomePage.css';
-
+import { UserContext } from '../context/UserContext';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
+  const { user, setUser } = useContext(UserContext);
+  const navigate = useNavigate();
+
   const [time, setTime] = useState(new Date());
   const [showModal, setShowModal] = useState(false);
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [meetingDetails, setMeetingDetails] = useState({ description: '', dateTime: '' });
+  const [meetingLink, setMeetingLink] = useState('');
+  const [joinInput, setJoinInput] = useState('');
+  const [showJoinPopup, setShowJoinPopup] = useState(false);
   const [activePage, setActivePage] = useState('home');
 
   useEffect(() => {
@@ -16,6 +23,12 @@ const HomePage = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setUser(null);
+    navigate('/');
+  };
 
   const formattedTime = time.toLocaleTimeString([], {
     hour: '2-digit',
@@ -48,7 +61,13 @@ const HomePage = () => {
 
         <div className="profile-section" onClick={() => setActivePage('profile')}>
           <img src="profile-photo.png" alt="profile" className="profile-pic" />
-          <p>Profile</p>
+          <div>
+            <p>{user?.fullName || 'Profile'}</p>
+            <button className="logout-btn" onClick={(e) => {
+              e.stopPropagation();
+              handleLogout();
+            }}>Logout</button>
+          </div>
         </div>
       </aside>
 
@@ -78,7 +97,7 @@ const HomePage = () => {
                 <span>New Meeting</span>
               </button>
 
-              <button className="join-meeting">
+              <button className="join-meeting" onClick={() => setShowJoinPopup(true)}>
                 <img src="join-meeting-icon.svg" alt="Join Meeting" className='button-icon' />
                 <span>Join Meeting</span>
               </button>
@@ -91,16 +110,19 @@ const HomePage = () => {
                     <img src="cross.svg" alt="Close" />
                   </button>
                   <h2>Create Meeting</h2>
-                  <label>Add a description : </label>
+                  <label>Add a description:</label>
                   <input type="text" placeholder='Enter description' />
-                  <label>Select Date & Time : </label>
+                  <label>Select Date & Time:</label>
                   <input type="datetime-local" />
                   <button
                     className='create-meeting-btn'
                     onClick={() => {
-                      const description = document.querySelector('input[type="text"]').value;
-                      const dateTime = document.querySelector('input[type="datetime-local"]').value;
+                      const description = document.querySelector('input[type=\"text\"]').value;
+                      const dateTime = document.querySelector('input[type=\"datetime-local\"]').value;
+                      const id = Math.random().toString(36).substring(2, 8);
+                      const link = `${window.location.origin}/meeting/${id}`;
                       setMeetingDetails({ description, dateTime });
+                      setMeetingLink(link);
                       setShowModal(false);
                       setShowConfirmation(true);
                     }}
@@ -123,23 +145,49 @@ const HomePage = () => {
                       timeStyle: 'short',
                     })}
                   </p>
+                  <p className="confirmation-link">
+                    Meeting Link:<br />
+                    <span style={{ fontSize: '14px', color: '#ccc' }}>{meetingLink}</span>
+                  </p>
                   <button
                     className="confirmation-copy"
-                    onClick={() =>
-                      navigator.clipboard.writeText(
-                        `Meeting: ${meetingDetails.description}\nTime: ${new Date(meetingDetails.dateTime).toLocaleString()}`
-                      )
-                    }
+                    onClick={() => navigator.clipboard.writeText(meetingLink)}
                   >
                     Copy Invitation
                   </button>
                   <button
                     className="confirmation-close"
-                    onClick={() => {
-                      setShowConfirmation(false);
-                    }}
+                    onClick={() => setShowConfirmation(false)}
                   >
                     Close
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {showJoinPopup && (
+              <div className="modal-overlay">
+                <div className="modal">
+                  <button className="close-btn" onClick={() => setShowJoinPopup(false)}>
+                    <img src="cross.svg" alt="Close" />
+                  </button>
+                  <h2>Join a Meeting</h2>
+                  <input
+                    type="text"
+                    placeholder="Enter Meeting ID or Link"
+                    value={joinInput}
+                    onChange={(e) => setJoinInput(e.target.value)}
+                  />
+                  <button
+                    className='create-meeting-btn'
+                    onClick={() => {
+                      const id = joinInput.includes('/meeting/')
+                        ? joinInput.split('/meeting/')[1]
+                        : joinInput;
+                      navigate(`/meeting/${id}`);
+                    }}
+                  >
+                    Join
                   </button>
                 </div>
               </div>

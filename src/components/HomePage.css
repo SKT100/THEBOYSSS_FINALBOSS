@@ -103,6 +103,7 @@
 
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 10px rgba(255, 255, 255, 0.05);
+  -webkit-backdrop-filter: blur(6px);
   backdrop-filter: blur(6px);
 
   transition: box-shadow 0.4s ease, border-color 0.4s ease;
@@ -240,6 +241,7 @@
   width: 100%;
   height: 100%;
   background: rgba(21, 21, 34, 0.5);
+  -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   display: flex;
   align-items: center;
@@ -320,6 +322,7 @@
   padding: 2rem;
   width: 360px;
   text-align: center;
+  -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
   box-shadow: 0 0 15px rgba(0,0,0,0.3);
 }
@@ -366,5 +369,21 @@
   border-radius: 10px;
   font-weight: bold;
   cursor: pointer;
+}
+
+.logout-btn {
+  margin-top: 8px;
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.logout-btn:hover {
+  background-color: #e60000;
 }
 
