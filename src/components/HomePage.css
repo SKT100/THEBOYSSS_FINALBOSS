@@ -167,6 +167,8 @@
   display: flex;
   justify-content: center;
   gap: 30px;
+  height: 150px;
+  
 }
 
 .room-card {
@@ -174,11 +176,12 @@
   border-radius: 10px;
   overflow: hidden;
   text-align: center;
+
 }
 
 .room-card img {
   width: 200px;
-  height: 120px;
+  height: 150px;
   object-fit: cover;
 }
 
@@ -387,3 +390,56 @@
   background-color: #e60000;
 }
 
+.confirmation-copy.shrink {
+  transform: scale(0.95);
+  transition: transform 0.2s ease;
+}
+
+@keyframes fadeZoomIn {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.copied-popup {
+  position: fixed;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(30, 30, 30, 0.95);
+  color: #fff;
+  padding: 20px 28px;
+  border-radius: 12px;
+  z-index: 1001;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+  animation: fadeZoomIn 0.3s ease forwards;
+  text-align: center;
+  min-width: 200px;
+}
+
+.copied-box p {
+  font-size: 18px;
+  margin-bottom: 14px;
+  font-weight: 500;
+}
+
+.copied-box button {
+  background-color: #444;
+  border: none;
+  color: #fff;
+  padding: 8px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 15px;
+  transition: background 0.3s ease;
+}
+
+.copied-box button:hover {
+  background-color: #666;
+}

@@ -17,6 +17,9 @@ const HomePage = () => {
   const [showJoinPopup, setShowJoinPopup] = useState(false);
   const [activePage, setActivePage] = useState('home');
 
+  const [copied, setCopied] = useState(false); // NEW STATE
+  const [copyClicked, setCopyClicked] = useState(false); // FOR ANIMATION
+
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
@@ -82,12 +85,10 @@ const HomePage = () => {
             <h2 className="rooms-title">Rooms</h2>
             <div className="room-cards">
               <div className="room-card">
-                <img src="classroom.jpg" alt="Class Room" />
-                <p>CLASS ROOM</p>
+                <img src="Classroom.png" alt="Class Room" />
               </div>
               <div className="room-card">
-                <img src="boardroom.jpg" alt="Board Room" />
-                <p>BOARD ROOM</p>
+                <img src="Office.png" alt="Board Room" />
               </div>
             </div>
 
@@ -117,8 +118,8 @@ const HomePage = () => {
                   <button
                     className='create-meeting-btn'
                     onClick={() => {
-                      const description = document.querySelector('input[type=\"text\"]').value;
-                      const dateTime = document.querySelector('input[type=\"datetime-local\"]').value;
+                      const description = document.querySelector('input[type="text"]').value;
+                      const dateTime = document.querySelector('input[type="datetime-local"]').value;
                       const id = Math.random().toString(36).substring(2, 8);
                       const link = `${window.location.origin}/meeting/${id}`;
                       setMeetingDetails({ description, dateTime });
@@ -150,8 +151,13 @@ const HomePage = () => {
                     <span style={{ fontSize: '14px', color: '#ccc' }}>{meetingLink}</span>
                   </p>
                   <button
-                    className="confirmation-copy"
-                    onClick={() => navigator.clipboard.writeText(meetingLink)}
+                    className={`confirmation-copy ${copyClicked ? 'shrink' : ''}`}
+                    onClick={() => {
+                      navigator.clipboard.writeText(meetingLink);
+                      setCopied(true);
+                      setCopyClicked(true);
+                      setTimeout(() => setCopyClicked(false), 200);
+                    }}
                   >
                     Copy Invitation
                   </button>
@@ -161,6 +167,15 @@ const HomePage = () => {
                   >
                     Close
                   </button>
+                </div>
+              </div>
+            )}
+
+            {copied && (
+              <div className="copied-popup">
+                <div className="copied-box">
+                  <p>Link copied!</p>
+                  <button onClick={() => setCopied(false)}>OK</button>
                 </div>
               </div>
             )}
