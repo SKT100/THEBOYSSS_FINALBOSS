@@ -1,10 +1,5 @@
-/**
- * Enhanced MeetingRoom.jsx
- * - All control bar buttons functional: record, mute, unmute, call end, video toggle, screen share
- */
-
 import React, { useState, useEffect, useRef } from "react";
-import SecurityIcon from '/public/Security.svg';
+import SecurityIcon from "../assets/Security.svg";
 import "./Meeting-room.css";
 import {
   FaMicrophoneSlash,
@@ -15,9 +10,10 @@ import {
   FaUserFriends,
   FaComments,
   FaCog,
-  FaArrowRight
+  FaArrowRight,
 } from "react-icons/fa";
 import { MdOutlineScreenShare } from "react-icons/md";
+import ThreeScene from "./ThreeScene";
 
 const MeetingRoom = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -32,7 +28,8 @@ const MeetingRoom = () => {
   const localVideoRef = useRef();
 
   useEffect(() => {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    navigator.mediaDevices
+      .getUserMedia({ video: true, audio: true })
       .then((mediaStream) => {
         setStream(mediaStream);
         if (localVideoRef.current) {
@@ -93,7 +90,9 @@ const MeetingRoom = () => {
 
   const startScreenShare = async () => {
     try {
-      const screenStream = await navigator.mediaDevices.getDisplayMedia({ video: true });
+      const screenStream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+      });
       const screenTrack = screenStream.getVideoTracks()[0];
       if (stream) {
         const sender = stream.getVideoTracks()[0];
@@ -133,25 +132,41 @@ const MeetingRoom = () => {
         </div>
       </div>
 
-      {/* Local Video */}
-      <video
-        ref={localVideoRef}
-        autoPlay
-        muted
-        playsInline
-        className="local-video"
-      />
+      <div className="threejs-window">
+        <ThreeScene />
+      </div>
+
+      {/* Main Meeting Area */}
+      <div className="meeting-main-area">
+        {/* Local Video */}
+        <video
+          ref={localVideoRef}
+          autoPlay
+          muted
+          playsInline
+          className="local-video"
+        />
+      </div>
 
       {/* Control Bar */}
       <div className="control-bar">
         <button className="control-btn" onClick={toggleRecording}>
-          <FaRegCircle className="control-icon" color={isRecording ? "red" : "white"} />
+          <FaRegCircle
+            className="control-icon"
+            color={isRecording ? "red" : "white"}
+          />
         </button>
         <button className="control-btn" onClick={toggleVideo}>
-          <FaVideoSlash className="control-icon" color={videoEnabled ? "white" : "red"} />
+          <FaVideoSlash
+            className="control-icon"
+            color={videoEnabled ? "white" : "red"}
+          />
         </button>
         <button className="control-btn" onClick={toggleAudio}>
-          <FaMicrophoneSlash className="control-icon" color={audioEnabled ? "white" : "red"} />
+          <FaMicrophoneSlash
+            className="control-icon"
+            color={audioEnabled ? "white" : "red"}
+          />
         </button>
         <button className="control-btn end-call" onClick={endCall}>
           <FaPhoneSlash className="control-icon" />
@@ -161,13 +176,14 @@ const MeetingRoom = () => {
         </button>
       </div>
 
-      {/* Right Sidebar */}
+      {/* Sidebar */}
       {isSidebarOpen && (
         <div className={`right-sidebar ${jiggle ? "jiggle" : ""}`}>
-          {/* Tabs */}
           <div className="sidebar-tabs">
             <button
-              className={`tab-btn ${activeTab === "participants" ? "active" : ""}`}
+              className={`tab-btn ${
+                activeTab === "participants" ? "active" : ""
+              }`}
               onClick={() => setActiveTab("participants")}
             >
               <FaUserFriends /> Participants
@@ -180,19 +196,21 @@ const MeetingRoom = () => {
             </button>
           </div>
 
-          {/* Tab Content */}
           <div className="sidebar-content">
             {activeTab === "participants" ? (
               <div className="tab-panel">
                 <p>John Doe</p>
                 <p>Jane Smith</p>
-                <p>Bob Johnson</p>
               </div>
             ) : (
               <>
                 <div className="tab-panel chat-panel">
-                  <p><strong>John:</strong> Hello!</p>
-                  <p><strong>You:</strong> Hi everyone!</p>
+                  <p>
+                    <strong>John:</strong> Hello!
+                  </p>
+                  <p>
+                    <strong>You:</strong> Hi!
+                  </p>
                 </div>
                 <div className="chat-input-bar">
                   <input
@@ -208,7 +226,6 @@ const MeetingRoom = () => {
             )}
           </div>
 
-          {/* Bottom Controls */}
           <div className="sidebar-bottom">
             <button onClick={closeSidebar}>
               <FaArrowRight />
