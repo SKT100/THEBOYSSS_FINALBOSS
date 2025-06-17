@@ -116,6 +116,68 @@
     0 0 25px rgba(255, 255, 255, 0.15);
 }
 
+.nav-list li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  color: #ccc;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.3s;
+  border-radius: 8px;
+}
+
+
+
+.active-tab{
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-weight: bold;
+  border-left: 4px solid #00ffff;
+}
+
+.nav-list li img {
+  width: 24px;
+  height: 24px;
+  transition: transform 0.3s ease;
+}
+
+.nav-text{
+  font-size: 16px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-list li:hover .nav-text {
+  transform: scale(1.1);
+}
+
+.nav-list li:hover img {
+  animation: jiggle 0.4s ease;
+}
+
+
+.nav-item{
+  transition: transform 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 10px; /* space between icon and text */
+  padding: 12px 10px;
+  border-radius: 8px;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.nav-item.zoom {
+  transform: scale(1.08);
+}
+
+.nav-item.zoom:active{
+  transform: scale(1.05);
+}
+
 .profile-section {
   display: flex;
   align-items: center;
@@ -137,12 +199,13 @@
 
 
 .clock-box {
-  background-image: url('/public/HP-clk-bg.jpg');
+  background-image: url('/HP-clk-bg.jpg');
   padding: 30px 40px;
   border-radius: 16px;
   margin: 0 auto 30px auto;
   text-align: center;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  margin-bottom: 30px;
 }
 
 .clock-box h1 {
@@ -166,17 +229,18 @@
 .room-cards {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  height: 150px;
-  
+  align-items: center;
+  gap: 30px; /* adds space between boxes */
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
 .room-card {
-  background-color: #111;
+  cursor: pointer;
+  border: 2px solid transparent;
   border-radius: 10px;
   overflow: hidden;
-  text-align: center;
-
+  transition: 0.3s ease;
 }
 
 .room-card img {
@@ -190,6 +254,12 @@
   font-weight: bold;
   margin: 10px 0;
   letter-spacing: 5px;
+}
+
+.room-card.selected {
+  border: 2px solid #6C63FF; /* highlighted color */
+  box-shadow: 0 0 10px rgba(108, 99, 255, 0.5);
+  transform: scale(1.03);
 }
 
 .buttons {
@@ -442,4 +512,16 @@
 
 .copied-box button:hover {
   background-color: #666;
+}
+
+@keyframes jiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  75% {
+    transform: rotate(10deg);
+  }
 }

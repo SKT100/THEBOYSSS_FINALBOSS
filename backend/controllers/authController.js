@@ -4,6 +4,22 @@ const User = require('../models/User');
 
 const SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
+const User = require('../models/User');
+
+const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password'); // remove password
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user);
+  } catch (err) {
+    res.status(500).json({ message: 'Server error' });
+  }
+};
+
+module.exports = { getMe };
+
+
 exports.signupUser = async (req, res) => {
   const { fullName, username, email, phone, password } = req.body;
 

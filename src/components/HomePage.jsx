@@ -4,6 +4,12 @@ import './HomePage.css';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
+import ConferencePage from './ConferencePage';
+import NetworkPage from './NetworkPage';
+import AvatarPage from './AvatarPage';
+import SettingsPage from './SettingsPage';
+
+
 const HomePage = () => {
   const { user, setUser } = useContext(UserContext);
   const navigate = useNavigate();
@@ -17,6 +23,7 @@ const HomePage = () => {
   const [showJoinPopup, setShowJoinPopup] = useState(false);
   const [activePage, setActivePage] = useState('home');
 
+  const [selectedRoom, setSelectedRoom] = useState(''); //FOR SELECTING ROOMS
   const [copied, setCopied] = useState(false); // NEW STATE
   const [copyClicked, setCopyClicked] = useState(false); // FOR ANIMATION
 
@@ -56,11 +63,52 @@ const HomePage = () => {
         </div>
 
         <ul className="nav-list">
-          <li><img src="conference.svg" alt="conference" className='conference-img' />Conference Rooms</li>
-          <li><img src="network.svg" alt="network" className='network-img' />Network</li>
-          <li><img src="avatar.svg" alt="avatar" className='avatar-img' />Avatar</li>
-          <li><img src="settings.svg" alt="settings" className='setting-img' />Settings</li>
+          <li
+            className={activePage === 'conference' ? 'active' : ''}
+            onClick={() => {
+              setActivePage('conference');
+              navigate('/conference');
+            }}
+          >
+            <img src="conference.svg" alt="conference" />
+            <span className="nav-text">Conference Rooms</span>
+          </li>
+
+          <li
+            className={activePage === 'network' ? 'active' : ''}
+            onClick={() => {
+              setActivePage('network');
+              navigate('/network');
+            }}
+          >
+            <img src="network.svg" alt="network" />
+            <span className="nav-text">Network</span>
+          </li>
+
+          <li
+            className={activePage === 'avatar' ?  'active' : ''}
+            onClick={() => {
+              setActivePage('avatar');
+              navigate('/avatar');
+            }}
+          >
+            <img src="avatar.svg" alt="avatar" />
+            <span className="nav-text">Avatar</span>
+          </li>
+
+          <li
+            className={activePage === 'settings'  ? 'active' : ''}
+            onClick={() => {
+              setActivePage('settings');
+              navigate('/settings');
+            }}
+          >
+            <img src="settings.svg" alt="settings" />
+            <span className="nav-text">Settings</span>
+          </li>
         </ul>
+
+
 
         <div className="profile-section" onClick={() => setActivePage('profile')}>
           <img src="profile-photo.png" alt="profile" className="profile-pic" />
@@ -84,12 +132,21 @@ const HomePage = () => {
 
             <h2 className="rooms-title">Rooms</h2>
             <div className="room-cards">
-              <div className="room-card">
+
+              <div
+                className={`room-card ${selectedRoom === 'Classroom' ? 'selected' : ''}`}
+                onClick={() => setSelectedRoom('Classroom')}
+              >
                 <img src="Classroom.png" alt="Class Room" />
               </div>
-              <div className="room-card">
+
+              <div
+                className={`room-card ${selectedRoom === 'office' ? 'selected' : ''}`}
+                onClick={() => setSelectedRoom('office')}
+              >
                 <img src="Office.png" alt="Board Room" />
               </div>
+
             </div>
 
             <div className="buttons">

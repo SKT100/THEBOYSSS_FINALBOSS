@@ -1,13 +1,12 @@
 import React, { useContext, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { FiArrowLeftCircle } from "react-icons/fi";
 import "./Profile.css";
 import { UserContext } from "../context/UserContext";
 
-
-
 const Profile = () => {
   const { user } = useContext(UserContext);
-
-  
+  const navigate = useNavigate(); // Hook for navigation
 
   const [editField, setEditField] = useState(null);
   const [formData, setFormData] = useState({
@@ -40,9 +39,23 @@ const Profile = () => {
     }
   };
 
+  const handleBackClick = () => {
+    const icon = document.querySelector(".back-icon");
+    icon.classList.add("animate-back");
+    setTimeout(() => {
+      navigate("/homepage");
+    }, 300);
+  };
+
   return (
     <div className="profile-container">
       <div className="profile-card">
+        <FiArrowLeftCircle
+          className="back-icon"
+          size={28}
+          onClick={handleBackClick}
+          title="Go back"
+        />
         <div className="profile-image">
           <label htmlFor="profile-upload">
             <img src={profilePic} alt="User" className="clickable-image" />
@@ -57,6 +70,7 @@ const Profile = () => {
         </div>
 
         <div className="profile-details">
+          {/* Same content as before (unchanged) */}
           <div className="row">
             <div className="field">
               <label>Full name</label>
@@ -143,7 +157,7 @@ const Profile = () => {
                   />
                 ) : (
                   <>
-                    <span>{formData.phone}</span>
+                    <span>{formData.phone || "Not provided"}</span>
                     <img
                       src="/edit-icon.svg"
                       alt="edit"
