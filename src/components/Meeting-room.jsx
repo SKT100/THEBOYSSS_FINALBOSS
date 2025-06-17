@@ -82,7 +82,7 @@ const MeetingRoom = () => {
       setStream(null);
     }
     stopTimer();
-    navigate("/");
+    navigate("/homepage");
   };
 
   const toggleRecording = () => {
