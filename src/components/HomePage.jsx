@@ -4,11 +4,10 @@ import './HomePage.css';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 
-import ConferencePage from './ConferencePage';
+
 import NetworkPage from './NetworkPage';
 import AvatarPage from './AvatarPage';
 import SettingsPage from './SettingsPage';
-
 
 const HomePage = () => {
   const { user, setUser } = useContext(UserContext);
@@ -21,11 +20,12 @@ const HomePage = () => {
   const [meetingLink, setMeetingLink] = useState('');
   const [joinInput, setJoinInput] = useState('');
   const [showJoinPopup, setShowJoinPopup] = useState(false);
-  const [activePage, setActivePage] = useState('home');
+  const [activePage, setActivePage] = useState('conference');
+  const [selectedRoom, setSelectedRoom] = useState('');
+  const [copied, setCopied] = useState(false);
+  const [copyClicked, setCopyClicked] = useState(false);
+  const [isShrinking, setIsShrinking] = useState(false);
 
-  const [selectedRoom, setSelectedRoom] = useState(''); //FOR SELECTING ROOMS
-  const [copied, setCopied] = useState(false); // NEW STATE
-  const [copyClicked, setCopyClicked] = useState(false); // FOR ANIMATION
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -57,7 +57,19 @@ const HomePage = () => {
   return (
     <div className="home-container">
       <aside className="sidebar">
-        <div className="logo-section">
+
+        <div
+          className={`logo-section ${activePage === 'profile' && isShrinking ? 'shrink' : ''}`}
+          onClick={() => {
+            if (activePage === 'profile') {
+              setIsShrinking(true);
+              setTimeout(() => {
+                setActivePage('conference');
+                setIsShrinking(false);
+              }, 400); // match with CSS duration
+            }
+          }}
+        >
           <img src="logo-white.svg" alt="Logo" className="logo-img" />
           <div className="logo">BEYOND<span>meet</span></div>
         </div>
@@ -65,10 +77,7 @@ const HomePage = () => {
         <ul className="nav-list">
           <li
             className={activePage === 'conference' ? 'active' : ''}
-            onClick={() => {
-              setActivePage('conference');
-              navigate('/conference');
-            }}
+            onClick={() => setActivePage('conference')}
           >
             <img src="conference.svg" alt="conference" />
             <span className="nav-text">Conference Rooms</span>
@@ -76,39 +85,28 @@ const HomePage = () => {
 
           <li
             className={activePage === 'network' ? 'active' : ''}
-            onClick={() => {
-              setActivePage('network');
-              navigate('/network');
-            }}
+            onClick={() => setActivePage('network')}
           >
             <img src="network.svg" alt="network" />
             <span className="nav-text">Network</span>
           </li>
 
           <li
-            className={activePage === 'avatar' ?  'active' : ''}
-            onClick={() => {
-              setActivePage('avatar');
-              navigate('/avatar');
-            }}
+            className={activePage === 'avatar' ? 'active' : ''}
+            onClick={() => setActivePage('avatar')}
           >
             <img src="avatar.svg" alt="avatar" />
             <span className="nav-text">Avatar</span>
           </li>
 
           <li
-            className={activePage === 'settings'  ? 'active' : ''}
-            onClick={() => {
-              setActivePage('settings');
-              navigate('/settings');
-            }}
+            className={activePage === 'settings' ? 'active' : ''}
+            onClick={() => setActivePage('settings')}
           >
             <img src="settings.svg" alt="settings" />
             <span className="nav-text">Settings</span>
           </li>
         </ul>
-
-
 
         <div className="profile-section" onClick={() => setActivePage('profile')}>
           <img src="profile-photo.png" alt="profile" className="profile-pic" />
@@ -123,7 +121,7 @@ const HomePage = () => {
       </aside>
 
       <main className="main-content">
-        {activePage === 'home' ? (
+        {activePage === 'conference' ? (
           <>
             <div className="clock-box">
               <h1>{formattedTime}</h1>
@@ -132,7 +130,6 @@ const HomePage = () => {
 
             <h2 className="rooms-title">Rooms</h2>
             <div className="room-cards">
-
               <div
                 className={`room-card ${selectedRoom === 'Classroom' ? 'selected' : ''}`}
                 onClick={() => setSelectedRoom('Classroom')}
@@ -146,7 +143,6 @@ const HomePage = () => {
               >
                 <img src="Office.png" alt="Board Room" />
               </div>
-
             </div>
 
             <div className="buttons">
@@ -265,6 +261,12 @@ const HomePage = () => {
               </div>
             )}
           </>
+        ) : activePage === 'network' ? (
+          <NetworkPage />
+        ) : activePage === 'avatar' ? (
+          <AvatarPage />
+        ) : activePage === 'settings' ? (
+          <SettingsPage />
         ) : activePage === 'profile' ? (
           <Profile />
         ) : null}

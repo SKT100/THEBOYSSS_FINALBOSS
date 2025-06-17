@@ -126,34 +126,5 @@
   opacity: 0.8;
 }
 
-.back-icon {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  color: #dcd0ff;
-  cursor: pointer;
-  z-index: 100;
-  transition: transform 0.2s ease;
-}
-
-.back-icon:hover {
-  transform: scale(1.1);
-  color: #fff;
-}
 
 
-.animate-back {
-  opacity: 0;
-  transform: translateX(-20px);
-}
-
-
-@keyframes backSlide {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-20px);
-    opacity: 0;
-  }
-}

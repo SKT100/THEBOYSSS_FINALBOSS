@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import SecurityIcon from "../assets/Security.svg";
 import "./Meeting-room.css";
 import {
@@ -13,7 +14,6 @@ import {
   FaArrowRight,
 } from "react-icons/fa";
 import { MdOutlineScreenShare } from "react-icons/md";
-import ThreeScene from "./ThreeScene";
 
 const MeetingRoom = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -23,9 +23,13 @@ const MeetingRoom = () => {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [videoEnabled, setVideoEnabled] = useState(true);
   const [isRecording, setIsRecording] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [timer, setTimer] = useState(0);
   const mediaRecorderRef = useRef(null);
   const recordedChunks = useRef([]);
   const localVideoRef = useRef();
+  const timerRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     navigator.mediaDevices
@@ -35,9 +39,28 @@ const MeetingRoom = () => {
         if (localVideoRef.current) {
           localVideoRef.current.srcObject = mediaStream;
         }
+        startTimer();
       })
       .catch((err) => console.error("Media access error:", err));
+
+    return () => stopTimer();
   }, []);
+
+  const startTimer = () => {
+    timerRef.current = setInterval(() => {
+      setTimer((prev) => prev + 1);
+    }, 1000);
+  };
+
+  const stopTimer = () => {
+    clearInterval(timerRef.current);
+  };
+
+  const formatTime = (sec) => {
+    const minutes = String(Math.floor(sec / 60)).padStart(2, "0");
+    const seconds = String(sec % 60).padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
 
   const toggleAudio = () => {
     if (stream) {
@@ -58,7 +81,8 @@ const MeetingRoom = () => {
       stream.getTracks().forEach((track) => track.stop());
       setStream(null);
     }
-    alert("Call Ended");
+    stopTimer();
+    navigate("/");
   };
 
   const toggleRecording = () => {
@@ -127,18 +151,17 @@ const MeetingRoom = () => {
         <div className="top-left-icon">
           <img src={SecurityIcon} alt="Security Icon" />
         </div>
+        <div className="meeting-timer">{formatTime(timer)}</div>
         <div className="top-right-icon" onClick={openSidebar}>
           <FaBars />
         </div>
       </div>
 
-      <div className="threejs-window">
-        <ThreeScene />
-      </div>
-
-      {/* Main Meeting Area */}
-      <div className="meeting-main-area">
-        {/* Local Video */}
+      {/* Local Video */}
+      <div
+        className={`video-preview-container ${isFullscreen ? "fullscreen" : ""}`}
+        onClick={() => setIsFullscreen(!isFullscreen)}
+      >
         <video
           ref={localVideoRef}
           autoPlay
