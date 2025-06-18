@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const verifyToken = require('../middleware/authMiddleware');
+const { getMe } = require('../controllers/authController'); // import the controller
 
-router.get('/me', verifyToken, (req, res) => {
-  res.json({ message: 'User verified', email: req.user.email });
-});
+router.get('/me', verifyToken, getMe); // use the actual logic
 
 module.exports = router;
